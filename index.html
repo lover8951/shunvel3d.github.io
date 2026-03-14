@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shunvel3D — 3D Печать</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            border: 1px solid #e2e8f0;
+            background: var(--white);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--gray);
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .lang-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .lang-btn.active {
+            color: var(--white);
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+            color: var(--white);
+            padding: 80px 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            opacity: 0.1;
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 700px;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .feature-text {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .feature-text strong {
+            display: block;
+            color: var(--white);
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .contacts {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Materials Section */
+        .materials {
+            padding: 80px 5%;
+            background: var(--white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.125rem;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .material-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .material-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+        }
+
+        .material-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #eff6ff 0%, var(--white) 100%);
+        }
+
+        .material-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--success);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .material-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .material-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .material-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .material-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .spec {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9375rem;
+            color: var(--dark);
+        }
+
+        .spec::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Gallery */
+        .gallery-section {
+            padding: 80px 5%;
+            background: #f1f5f9;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay span {
+            color: var(--white);
+            font-weight: 600;
+            padding: 12px 24px;
+            border: 2px solid var(--white);
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--primary);
+        }
+
+        .lightbox-prev {
+            left: 30px;
+        }
+
+        .lightbox-next {
+            right: 30px;
+        }
+
+        /* Info Section */
+        .info-section {
+            padding: 60px 5%;
+            background: var(--white);
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.75rem;
+            color: var(--white);
+        }
+
+        .info-item h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .info-item p {
+            color: var(--gray);
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        .footer-domain {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .footer-copy {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            /* Уменьшенная шапка для мобильной версии */
+            header {
+                padding: 10px 4%;
+            }
+            
+            .brand img {
+                height: 35px;
+            }
+            
+            .brand-text h1 {
+                font-size: 1.1rem;
+            }
+            
+            .brand-text p {
+                font-size: 0.7rem;
+            }
+            
+            .lang-btn {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
+            
+            .brand {
+                gap: 8px;
+            }
+            
+            .hero h2 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-features {
+                gap: 20px;
+            }
+            
+            .feature {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .lightbox-nav {
+                display: none;
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .contact-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .hero {
+                padding: 50px 4%;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 8px 3%;
+            }
+            
+            .brand img {
+                height: 30px;
+            }
+            
+            .brand-text h1 {
+                font-size: 1rem;
+            }
+            
+            .brand-text p {
+                font-size: 0.65rem;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .contacts {
+                flex-direction: column;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="brand">
+                <img src="https://ltdfoto.ru/images/2026/03/14/1000075768.png" alt="Shunvel3D" onerror="this.src='https://via.placeholder.com/50x50?text=Logo'">
+                <div class="brand-text">
+                    <h1>Shunvel3D</h1>
+                    <p data-ru="Павел Сергеевич" data-en="Pavel Sergeevich">Павел Сергеевич</p>
+                </div>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="badge" data-ru="Только готовые 3D модели" data-en="Ready 3D models only">Только готовые 3D модели</span>
+            <h2 data-ru="Профессиональная 3D печать ваших моделей" data-en="Professional 3D printing of your models">Профессиональная 3D печать ваших моделей</h2>
+            <p class="hero-description" data-ru="Отправьте готовую 3D модель — напечатаю качественно и быстро. Работаю только с подготовленными файлами (STL, OBJ, 3MF)." 
+               data-en="Send your ready 3D model — I'll print it with quality and speed. Working only with prepared files (STL, OBJ, 3MF).">
+                Отправьте готовую 3D модель — напечатаю качественно и быстро. Работаю только с подготовленными файлами (STL, OBJ, 3MF).
+            </p>
+            
+            <div class="hero-features">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <strong data-ru="2–24 часа" data-en="2–24 hours">2–24 часа</strong>
+                        <span data-ru="Срок изготовления" data-en="Production time">Срок изготовления</span>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">
+                        <strong data-ru="PLA / PETG" data-en="PLA / PETG">PLA / PETG</strong>
+                        <span data-ru="Виды пластика" data-en="Materials">Виды пластика</span>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📐</div>
+                    <div class="feature-text">
+                        <strong data-ru="Высокая точность" data-en="High precision">Высокая точность</strong>
+                        <span data-ru="Качество печати" data-en="Print quality">Качество печати</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contacts">
+                <a href="https://t.me/shunvel3D" class="contact-btn" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.015.093.034.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.697.063-1.226-.46-1.9-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212-.07-.063-.174-.04-.249-.024-.106.024-1.793 1.14-5.062 3.345-.48.33-.913.49-1.302.482-.428-.008-1.252-.24-1.865-.44-.751-.245-1.35-.374-1.297-.79.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.53 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635z"/>
+                    </svg>
+                    Telegram
+                </a>
+                <a href="https://vk.com/shunvel3d" class="contact-btn" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.714-1.033-1.033-1.49-1.172-1.744-1.172-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.678.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.254-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.049.17.49-.085.744-.576.744z"/>
+                    </svg>
+                    Вконтакте
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="materials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ru="Материалы для печати" data-en="Print Materials">Материалы для печати</h2>
+                <p class="section-subtitle" data-ru="Выберите подходящий пластик для вашей модели" data-en="Choose the right material for your model">Выберите подходящий пластик для вашей модели</p>
+            </div>
+            
+            <div class="materials-grid">
+                <div class="material-card featured">
+                    <span class="material-badge" data-ru="Популярный" data-en="Popular">Популярный</span>
+                    <div class="material-icon">🌿</div>
+                    <h3>PLA</h3>
+                    <p data-ru="Биоразлагаемый пластик на растительной основе. Идеален для декоративных изделий, прототипов и деталей без механических нагрузок." 
+                       data-en="Biodegradable plant-based plastic. Ideal for decorative items, prototypes and parts without mechanical loads.">
+                        Биоразлагаемый пластик на растительной основе. Идеален для декоративных изделий, прототипов и деталей без механических нагрузок.
+                    </p>
+                    <div class="material-specs">
+                        <span class="spec" data-ru="Лёгкий в обработке" data-en="Easy to process">Лёгкий в обработке</span>
+                        <span class="spec" data-ru="Матовая поверхность" data-en="Matte surface">Матовая поверхность</span>
+                        <span class="spec" data-ru="Широкая цветовая палитра" data-en="Wide color range">Широкая цветовая палитра</span>
+                    </div>
+                </div>
+                
+                <div class="material-card">
+                    <div class="material-icon">💪</div>
+                    <h3>PETG</h3>
+                    <p data-ru="Прочный и химически стойкий материал. Подходит для функциональных деталей, механизмов и изделий, контактирующих с пищевыми продуктами." 
+                       data-en="Strong and chemically resistant material. Suitable for functional parts, mechanisms and food contact items.">
+                        Прочный и химически стойкий материал. Подходит для функциональных деталей, механизмов и изделий, контактирующих с пищевыми продуктами.
+                    </p>
+                    <div class="material-specs">
+                        <span class="spec" data-ru="Высокая прочность" data-en="High strength">Высокая прочность</span>
+                        <span class="spec" data-ru="Устойчивость к УФ" data-en="UV resistance">Устойчивость к УФ</span>
+                        <span class="spec" data-ru="Глянцевая поверхность" data-en="Glossy surface">Глянцевая поверхность</span>
+                    </div>
+                </div>
+                
+                <div class="material-card">
+                    <div class="material-icon">⚙️</div>
+                    <h3>ABS</h3>
+                    <p data-ru="Ударопрочный инженерный пластик. Для деталей, требующих высокой термостойкости и механической прочности." 
+                       data-en="Impact-resistant engineering plastic. For parts requiring high heat resistance and mechanical strength.">
+                        Ударопрочный инженерный пластик. Для деталей, требующих высокой термостойкости и механической прочности.
+                    </p>
+                    <div class="material-specs">
+                        <span class="spec" data-ru="Термостойкость до 100°C" data-en="Heat resistant up to 100°C">Термостойкость до 100°C</span>
+                        <span class="spec" data-ru="Высокая ударопрочность" data-en="High impact strength">Высокая ударопрочность</span>
+                        <span class="spec" data-ru="Требует закрытую камеру" data-en="Requires enclosed chamber">Требует закрытую камеру</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-ru="Примеры работ" data-en="Portfolio">Примеры работ</h2>
+                <p class="section-subtitle" data-ru="Наши последние проекты" data-en="Our latest projects">Наши последние проекты</p>
+            </div>
+            
+            <div class="gallery" id="gallery">
+                <!-- Здесь будут элементы галереи через JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section">
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-icon">📦</div>
+                <h4 data-ru="Бесплатная доставка" data-en="Free delivery">Бесплатная доставка</h4>
+                <p data-ru="При заказе от 3000₽" data-en="For orders over 3000₽">При заказе от 3000₽</p>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">⚡</div>
+                <h4 data-ru="Срочная печать" data-en="Express printing">Срочная печать</h4>
+                <p data-ru="Готовность за 2 часа" data-en="Ready in 2 hours">Готовность за 2 часа</p>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🎨</div>
+                <h4 data-ru="20+ цветов" data-en="20+ colors">20+ цветов</h4>
+                <p data-ru="Различные цвета PLA/PETG" data-en="Various PLA/PETG colors">Различные цвета PLA/PETG</p>
+            </div>
+            <div class="info-item">
+                <div class="info-icon">🔧</div>
+                <h4 data-ru="Постобработка" data-en="Post-processing">Постобработка</h4>
+                <p data-ru="Шлифовка и грунтовка" data-en="Sanding and priming">Шлифовка и грунтовка</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-domain">Shunvel3D.ru</div>
+        <div class="footer-copy">© 2026 Shunvel3D — Павел Сергеевич. Все права защищены.</div>
+    </footer>
+
+    <!-- Лайтбокс -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <button class="lightbox-nav lightbox-prev" onclick="changeImage(-1)">←</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="">
+        <button class="lightbox-nav lightbox-next" onclick="changeImage(1)">→</button>
+    </div>
+
+    <script>
+        // Данные для галереи с вашими изображениями (теперь 8 работ)
+        const galleryImages = [
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075774.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075774.png',
+                title: '3D модель #1' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075773.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075773.png',
+                title: '3D модель #2' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075776.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075776.png',
+                title: '3D модель #3' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075778.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075778.png',
+                title: '3D модель #4' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075783.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075783.png',
+                title: '3D модель #5' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075779.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075779.png',
+                title: '3D модель #6' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075769.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075769.png',
+                title: '3D модель #7' 
+            },
+            { 
+                src: 'https://ltdfoto.ru/images/2026/03/14/1000075770.png', 
+                fullSrc: 'https://ltdfoto.ru/images/2026/03/14/1000075770.png',
+                title: '3D модель #8' 
+            }
+        ];
+
+        // Текущее состояние
+        let currentLang = 'ru';
+        let currentImageIndex = 0;
+
+        // Функция для загрузки галереи
+        function loadGallery() {
+            const gallery = document.getElementById('gallery');
+            if (!gallery) return;
+            
+            gallery.innerHTML = '';
+            galleryImages.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.onclick = () => openLightbox(index);
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = img.src;
+                imgElement.alt = img.title;
+                imgElement.loading = 'lazy';
+                imgElement.onerror = function() {
+                    this.style.display = 'none';
+                    const fallbackText = document.createElement('div');
+                    fallbackText.style.cssText = 'display: flex; align-items: center; justify-content: center; height: 100%; padding: 20px; text-align: center; color: var(--gray);';
+                    fallbackText.textContent = img.title;
+                    item.appendChild(fallbackText);
+                };
+                
+                item.appendChild(imgElement);
+                
+                const overlay = document.createElement('div');
+                overlay.className = 'gallery-overlay';
+                overlay.innerHTML = `<span>${img.title}</span>`;
+                item.appendChild(overlay);
+                
+                gallery.appendChild(item);
+            });
+        }
+
+        // Функции для лайтбокса
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = galleryImages[index].fullSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function changeImage(direction) {
+            currentImageIndex = (currentImageIndex + direction + galleryImages.length) % galleryImages.length;
+            document.getElementById('lightbox-img').src = galleryImages[currentImageIndex].fullSrc;
+        }
+
+        // Обработка клавиш для лайтбокса
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changeImage(-1);
+            if (e.key === 'ArrowRight') changeImage(1);
+        });
+
+        // Функция смены языка
+        function setLang(lang) {
+            currentLang = lang;
+            
+            // Обновляем активные кнопки
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(lang)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Обновляем текст на странице
+            document.querySelectorAll('[data-ru][data-en]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${lang}`);
+            });
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGallery();
+            setLang('ru');
+        });
+    </script>
+</body>
+</html>

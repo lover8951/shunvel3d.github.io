@@ -297,9 +297,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
             margin-bottom: 20px;
-            color: var(--white);
+            overflow: hidden;
+        }
+
+        .material-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .material-card h3 {
@@ -728,7 +733,9 @@
             <div class="materials-grid">
                 <div class="material-card featured">
                     <span class="material-badge" data-ru="Популярный" data-en="Popular">Популярный</span>
-                    <div class="material-icon">🌿</div>
+                    <div class="material-icon">
+                        <img src="https://ltdfoto.ru/images/2026/03/23/images.jpg" alt="PLA">
+                    </div>
                     <h3>PLA</h3>
                     <p data-ru="Биоразлагаемый пластик на растительной основе. Идеален для декоративных изделий, прототипов и деталей без механических нагрузок." 
                        data-en="Biodegradable plant-based plastic. Ideal for decorative items, prototypes and parts without mechanical loads.">
@@ -742,7 +749,9 @@
                 </div>
                 
                 <div class="material-card">
-                    <div class="material-icon">💪</div>
+                    <div class="material-icon">
+                        <img src="https://ltdfoto.ru/images/2026/03/23/images-1.jpg" alt="PETG">
+                    </div>
                     <h3>PETG</h3>
                     <p data-ru="Прочный и химически стойкий материал. Подходит для функциональных деталей, механизмов и изделий, контактирующих с пищевыми продуктами." 
                        data-en="Strong and chemically resistant material. Suitable for functional parts, mechanisms and food contact items.">
@@ -756,7 +765,9 @@
                 </div>
                 
                 <div class="material-card">
-                    <div class="material-icon">⚙️</div>
+                    <div class="material-icon">
+                        <img src="https://ltdfoto.ru/images/2026/03/23/images-2.jpg" alt="ABS">
+                    </div>
                     <h3>ABS</h3>
                     <p data-ru="Ударопрочный инженерный пластик. Для деталей, требующих высокой термостойкости и механической прочности." 
                        data-en="Impact-resistant engineering plastic. For parts requiring high heat resistance and mechanical strength.">

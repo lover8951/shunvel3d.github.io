@@ -2,11 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shunvel3D — Изготовление 3D фигурок</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Shunvel3D — Изготовление 3D фигурок на заказ</title>
     <link rel="icon" type="image/png" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
     <link rel="apple-touch-icon" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (бесплатные иконки для соцсетей) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -24,7 +26,7 @@
         /* Шапка */
         header {
             background: linear-gradient(135deg, #0d2b0d 0%, #1a4a1a 100%);
-            padding: 15px 0;
+            padding: 12px 0;
             position: fixed;
             width: 100%;
             top: 0;
@@ -98,7 +100,7 @@
         /* Герой секция */
         .hero {
             margin-top: 85px;
-            padding: 80px 20px;
+            padding: 60px 20px 40px;
             text-align: center;
             background: radial-gradient(ellipse at center, #1b5e20 0%, #0a1f0a 70%);
             position: relative;
@@ -143,39 +145,31 @@
         /* Плавающие фигурки */
         .floating-figures {
             position: relative;
-            height: 500px;
+            height: auto;
+            min-height: 320px;
             margin: 40px auto;
             max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
 
         .float-fig {
-            position: absolute;
             animation: float 6s ease-in-out infinite;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
             transition: transform 0.3s;
             border-radius: 20px;
             object-fit: cover;
             height: 140px;
-            width: 110px;
+            width: auto;
+            max-width: 110px;
         }
 
         .float-fig:hover {
             transform: scale(1.15) !important;
             z-index: 10;
         }
-
-        .float-fig:nth-child(1) { left: 5%; top: 10%; animation-delay: 0s; }
-        .float-fig:nth-child(2) { left: 20%; top: 50%; animation-delay: 0.5s; }
-        .float-fig:nth-child(3) { left: 35%; top: 5%; animation-delay: 1s; }
-        .float-fig:nth-child(4) { left: 50%; top: 45%; animation-delay: 1.5s; }
-        .float-fig:nth-child(5) { left: 65%; top: 10%; animation-delay: 2s; }
-        .float-fig:nth-child(6) { left: 80%; top: 50%; animation-delay: 2.5s; }
-        .float-fig:nth-child(7) { left: 10%; top: 65%; animation-delay: 3s; }
-        .float-fig:nth-child(8) { left: 30%; top: 30%; animation-delay: 3.5s; }
-        .float-fig:nth-child(9) { left: 55%; top: 70%; animation-delay: 4s; }
-        .float-fig:nth-child(10) { left: 75%; top: 25%; animation-delay: 4.5s; }
-        .float-fig:nth-child(11) { left: 45%; top: 20%; animation-delay: 5s; }
-        .float-fig:nth-child(12) { left: 15%; top: 35%; animation-delay: 5.5s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -306,6 +300,7 @@
             opacity: 0;
             transform: translateY(50px);
             background: #1b5e20;
+            cursor: pointer;
         }
 
         .work-card.visible {
@@ -427,6 +422,20 @@
             color: #a5d6a7;
             font-size: 15px;
         }
+        
+        /* Кликабельные ссылки внутри текста */
+        .inline-link {
+            color: #ffeb3b;
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 1px dashed #ffeb3b;
+            transition: all 0.2s;
+        }
+        
+        .inline-link:hover {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
 
         /* Контакты */
         .contacts {
@@ -465,18 +474,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .contact-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: transform 0.3s;
-            filter: drop-shadow(0 0 10px rgba(129, 199, 132, 0.3));
-        }
-
-        .contact-card:hover .contact-icon img {
-            transform: scale(1.15) rotate(5deg);
+            font-size: 48px;
+            color: #81c784;
         }
 
         .contact-card h4 {
@@ -535,6 +534,7 @@
                 flex-direction: column;
                 padding: 20px;
                 gap: 15px;
+                text-align: center;
             }
 
             .nav-links.active {
@@ -544,14 +544,18 @@
             .hero h1 {
                 font-size: 32px;
             }
+            
+            .hero p {
+                font-size: 18px;
+            }
 
             .floating-figures {
-                height: 350px;
+                gap: 8px;
             }
 
             .float-fig {
-                height: 90px !important;
-                width: 70px !important;
+                height: 90px;
+                max-width: 70px;
             }
 
             .price-tag {
@@ -567,36 +571,26 @@
                 font-size: 22px;
             }
 
-            .contact-icon {
-                width: 60px;
-                height: 60px;
-            }
-
             .step-icon {
                 width: 120px;
                 height: 120px;
                 padding: 15px;
             }
+            
+            .section-title {
+                font-size: 28px;
+            }
         }
-
-        /* Параллакс эффект */
-        .parallax-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.03;
-            background-image: 
-                radial-gradient(circle at 20% 50%, #4caf50 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, #81c784 0%, transparent 50%);
+        
+        @media (max-width: 480px) {
+            .float-fig {
+                height: 70px;
+                max-width: 55px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="parallax-bg"></div>
 
     <!-- Шапка -->
     <header>
@@ -605,7 +599,7 @@
                 <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png" alt="Shunvel 3D Logo">
                 <span class="logo-text">Shunvel 3D</span>
             </div>
-            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Меню">☰</button>
             <nav class="nav-links" id="navLinks">
                 <a href="#home">Главная</a>
                 <a href="#pricing">Расценки</a>
@@ -622,18 +616,18 @@
         <p>Создаём уникальные 3D-фигурки. Идеальный подарок для себя и близких!</p>
         
         <div class="floating-figures">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075769.png" class="float-fig" alt="3D фигурка 1">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075770.png" class="float-fig" alt="3D фигурка 2">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075771.png" class="float-fig" alt="3D фигурка 3">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075775.png" class="float-fig" alt="3D фигурка 4">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075773.png" class="float-fig" alt="3D фигурка 5">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075772.png" class="float-fig" alt="3D фигурка 6">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075776.png" class="float-fig" alt="3D фигурка 7">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075777.png" class="float-fig" alt="3D фигурка 8">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075779.png" class="float-fig" alt="3D фигурка 9">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075785.png" class="float-fig" alt="3D фигурка 10">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075786.png" class="float-fig" alt="3D фигурка 11">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075778.png" class="float-fig" alt="3D фигурка 12">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075769.png" class="float-fig" loading="lazy" alt="3D фигурка человека">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075770.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075771.png" class="float-fig" loading="lazy" alt="3D фигурка мужчины">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075775.png" class="float-fig" loading="lazy" alt="3D фигурка солдата">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075773.png" class="float-fig" loading="lazy" alt="3D фигурка модели">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075772.png" class="float-fig" loading="lazy" alt="3D фигурка персонажа">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075776.png" class="float-fig" loading="lazy" alt="3D фигурка воина">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075777.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075779.png" class="float-fig" loading="lazy" alt="3D фигурка">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075785.png" class="float-fig" loading="lazy" alt="3D фигурка героя">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075786.png" class="float-fig" loading="lazy" alt="3D фигурка">
+            <img src="https://ltdfoto.ru/images/2026/03/14/1000075778.png" class="float-fig" loading="lazy" alt="3D фигурка">
         </div>
     </section>
 
@@ -645,18 +639,18 @@
                 <span class="badge">Весенняя акция</span>
                 <h3>Фигурка высотой 15 см</h3>
                 <div class="price-old">от 1000₽</div>
-                <div class="price-tag">499₽</div>
+                <div class="price-tag" data-final="499">499₽</div>
                 <div class="price-old">до 4000₽</div>
-                <div class="price-tag" style="font-size: 24px; color: #a5d6a7;">1999₽</div>
+                <div class="price-tag" data-final="1999" style="font-size: 24px; color: #a5d6a7;">1999₽</div>
                 <p class="price-note">В зависимости от сложности</p>
             </div>
             <div class="price-card">
                 <span class="badge">Хит продаж</span>
                 <h3>Фигурка высотой 20 см</h3>
                 <div class="price-old">от 3000₽</div>
-                <div class="price-tag">1499₽</div>
+                <div class="price-tag" data-final="1499">1499₽</div>
                 <div class="price-old">до 6000₽</div>
-                <div class="price-tag" style="font-size: 24px; color: #a5d6a7;">2999₽</div>
+                <div class="price-tag" data-final="2999" style="font-size: 24px; color: #a5d6a7;">2999₽</div>
                 <p class="price-note">В зависимости от сложности</p>
             </div>
         </div>
@@ -667,56 +661,56 @@
         <h2 class="section-title">Наши работы</h2>
         <div class="works-grid">
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-214017.png" alt="Работа 1">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-214017.png" loading="lazy" alt="Фигурка Воин освободитель">
                 <div class="work-overlay">
                     <h4>Воин освободитель</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215459.png" alt="Работа 2">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215459.png" loading="lazy" alt="Фигурка Родина мать зовет">
                 <div class="work-overlay">
                     <h4>Родина мать зовет</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215554.png" alt="Работа 3">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215554.png" loading="lazy" alt="Фигурка Виктор Цой">
                 <div class="work-overlay">
                     <h4>Виктор Цой</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215946.png" alt="Работа 4">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215946.png" loading="lazy" alt="Герб Российской Федерации 3D">
                 <div class="work-overlay">
                     <h4>Герб Российской Федерации</h4>
-                    <p></p>
+                    <p>Детализированная модель</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-000239.png" alt="Работа 5">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-000239.png" loading="lazy" alt="Фигурка по фото клиента">
                 <div class="work-overlay">
                     <h4>Фигурка по фото</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-26-214923.png" alt="Работа 6">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-26-214923.png" loading="lazy" alt="Коллекционная фигурка">
                 <div class="work-overlay">
                     <h4>Коллекционная фигурка</h4>
                     <p>Высота 240 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-001721.png" alt="Работа 7">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-001721.png" loading="lazy" alt="Логотип сайта Shunvel 3D фигурка">
                 <div class="work-overlay">
                     <h4>Логотип этого сайта</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-002044.png" alt="Работа 8">
+                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-002044.png" loading="lazy" alt="3D фигурка корабля">
                 <div class="work-overlay">
                     <h4>Корабль</h4>
                     <p>Длина 150 мм</p>
@@ -725,34 +719,38 @@
         </div>
     </section>
 
-    <!-- Процесс -->
+    <!-- Процесс (ИСПРАВЛЕНО: кликабельные ссылки и заменена иконка) -->
     <section class="process" id="process">
         <h2 class="section-title">Как сделать заказ</h2>
         <div class="process-steps">
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/123.png" alt="Отправьте фото">
+                    <img src="https://ltdfoto.ru/images/2026/04/27/123.png" alt="Иконка отправки фото">
                 </div>
                 <h4>1. Отправьте фото</h4>
-                <p>Пришлите нам фотографию в VK или Telegram</p>
+                <p>Пришлите нам фотографию в 
+                    <a href="https://vk.com/shunvel3d" target="_blank" class="inline-link">VK</a> или 
+                    <a href="https://t.me/shunvel3D" target="_blank" class="inline-link">Telegram</a>
+                </p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/28/SNIMOK-EKRANA-2026-04-28-094325.png" alt="Мы моделируем">
+                    <!-- ЗАМЕНЕНО ИЗОБРАЖЕНИЕ НА НОВОЕ -->
+                    <img src="https://ltdfoto.ru/images/2026/04/28/remove.photos-removed-background-1.png" alt="Иконка 3D моделирования">
                 </div>
                 <h4>2. Мы моделируем</h4>
                 <p>Создаём 3D-модель и согласовываем с вами</p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/44230.png" alt="Печатаем">
+                    <img src="https://ltdfoto.ru/images/2026/04/27/44230.png" alt="Иконка 3D принтера">
                 </div>
                 <h4>3. Печатаем</h4>
                 <p>Изготавливаем фигурку на 3D-принтере</p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/ba7aa3fc29774b2fd750f7f471fc2135.png" alt="Получаете">
+                    <img src="https://ltdfoto.ru/images/2026/04/27/ba7aa3fc29774b2fd750f7f471fc2135.png" alt="Иконка доставки">
                 </div>
                 <h4>4. Получаете</h4>
                 <p>Доставка по всей России или самовывоз</p>
@@ -769,21 +767,21 @@
         <div class="contact-grid">
             <div class="contact-card">
                 <div class="contact-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                    <i class="fab fa-telegram-plane"></i>
                 </div>
                 <h4>Telegram</h4>
                 <a href="https://t.me/shunvel3D" target="_blank">@shunvel3D</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/VK_Compact_Logo_%282021-present%29.svg" alt="ВКонтакте">
+                    <i class="fab fa-vk"></i>
                 </div>
                 <h4>ВКонтакте</h4>
-                <a href="https://vk.ru/shunvel3d" target="_blank">vk.ru/shunvel3d</a>
+                <a href="https://vk.com/shunvel3d" target="_blank">vk.com/shunvel3d</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail">
+                    <i class="fas fa-envelope"></i>
                 </div>
                 <h4>Email</h4>
                 <a href="mailto:shunvel3d@gmail.com">shunvel3d@gmail.com</a>
@@ -810,7 +808,10 @@
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    document.getElementById('navLinks').classList.remove('active');
+                    // Закрываем мобильное меню после клика
+                    if (document.getElementById('navLinks').classList.contains('active')) {
+                        document.getElementById('navLinks').classList.remove('active');
+                    }
                 }
             });
         });
@@ -829,54 +830,64 @@
             });
         }, observerOptions);
 
-        // Наблюдаем за карточками работ
-        document.querySelectorAll('.work-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.1}s`;
-            observer.observe(card);
+        // Наблюдаем за карточками работ и шагами процесса
+        document.querySelectorAll('.work-card, .step').forEach((el) => {
+            observer.observe(el);
         });
 
-        // Наблюдаем за шагами процесса
-        document.querySelectorAll('.step').forEach((step, index) => {
-            step.style.transitionDelay = `${index * 0.15}s`;
-            observer.observe(step);
-        });
-
-        // Параллакс эффект для фона
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.parallax-bg');
-            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
-        });
-
-        // Анимация счётчика цен
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start) + '₽';
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
+        // Умная анимация цен (счетчик)
+        function animatePrice(element, finalPrice) {
+            let start = 0;
+            let duration = 1500; // 1.5 секунды
+            let stepTime = 20;
+            let steps = duration / stepTime;
+            let increment = finalPrice / steps;
+            let current = 0;
+            
+            let timer = setInterval(() => {
+                current += increment;
+                if (current >= finalPrice) {
+                    element.innerText = finalPrice + '₽';
+                    clearInterval(timer);
+                } else {
+                    element.innerText = Math.floor(current) + '₽';
                 }
-            };
-            window.requestAnimationFrame(step);
+            }, stepTime);
         }
 
-        // Запуск анимации цен при появлении
+        // Запуск анимации цен при появлении блока
         const priceObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
                     entry.target.classList.add('animated');
-                    const finalValue = parseInt(entry.target.innerText);
-                    animateValue(entry.target, 0, finalValue, 1500);
+                    const finalValue = parseInt(entry.target.getAttribute('data-final'));
+                    if (!isNaN(finalValue)) {
+                        entry.target.innerText = '0₽';
+                        animatePrice(entry.target, finalValue);
+                    }
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
 
+        // Следим за всеми тегами с ценой
         document.querySelectorAll('.price-tag').forEach(tag => {
-            const value = parseInt(tag.innerText);
-            tag.innerText = '0₽';
-            priceObserver.observe(tag);
+            if (tag.getAttribute('data-final')) {
+                priceObserver.observe(tag);
+            }
+        });
+
+        // Легкий параллакс для фона (отключаем на мобильных для производительности)
+        if (window.innerWidth > 768) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.parallax-bg');
+                if (parallax) parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
+            });
+        }
+        
+        // Небольшое улучшение для фигурок - рандомная задержка анимации
+        document.querySelectorAll('.float-fig').forEach((fig, index) => {
+            fig.style.animationDelay = (index * 0.1) + 's';
         });
     </script>
 </body>

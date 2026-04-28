@@ -7,8 +7,6 @@
     <link rel="icon" type="image/png" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
     <link rel="apple-touch-icon" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (бесплатные иконки для соцсетей) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -468,14 +466,24 @@
         }
 
         .contact-icon {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            color: #81c784;
+        }
+
+        .contact-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 0 10px rgba(129, 199, 132, 0.3));
+        }
+
+        .contact-card:hover .contact-icon img {
+            transform: scale(1.15) rotate(5deg);
         }
 
         .contact-card h4 {
@@ -579,6 +587,11 @@
             
             .section-title {
                 font-size: 28px;
+            }
+
+            .contact-icon {
+                width: 60px;
+                height: 60px;
             }
         }
         
@@ -719,7 +732,7 @@
         </div>
     </section>
 
-    <!-- Процесс (ИСПРАВЛЕНО: кликабельные ссылки и заменена иконка) -->
+    <!-- Процесс -->
     <section class="process" id="process">
         <h2 class="section-title">Как сделать заказ</h2>
         <div class="process-steps">
@@ -735,7 +748,6 @@
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <!-- ЗАМЕНЕНО ИЗОБРАЖЕНИЕ НА НОВОЕ -->
                     <img src="https://ltdfoto.ru/images/2026/04/28/remove.photos-removed-background-1.png" alt="Иконка 3D моделирования">
                 </div>
                 <h4>2. Мы моделируем</h4>
@@ -758,7 +770,7 @@
         </div>
     </section>
 
-    <!-- Контакты -->
+    <!-- Контакты - ОРИГИНАЛЬНЫЕ ЗНАЧКИ -->
     <section class="contacts" id="contacts">
         <h2 class="section-title">Свяжитесь с нами</h2>
         <p style="text-align: center; color: #a5d6a7; margin-bottom: 40px; font-size: 18px;">
@@ -767,21 +779,21 @@
         <div class="contact-grid">
             <div class="contact-card">
                 <div class="contact-icon">
-                    <i class="fab fa-telegram-plane"></i>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
                 </div>
                 <h4>Telegram</h4>
                 <a href="https://t.me/shunvel3D" target="_blank">@shunvel3D</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon">
-                    <i class="fab fa-vk"></i>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/VK_Compact_Logo_%282021-present%29.svg" alt="ВКонтакте">
                 </div>
                 <h4>ВКонтакте</h4>
                 <a href="https://vk.com/shunvel3d" target="_blank">vk.com/shunvel3d</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail">
                 </div>
                 <h4>Email</h4>
                 <a href="mailto:shunvel3d@gmail.com">shunvel3d@gmail.com</a>

@@ -3,10 +3,19 @@ html_code = '''<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src * data: blob:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shunvel3D — Изготовление 3D фигурок на заказ</title>
-    <link rel="icon" type="image/png" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
-    <link rel="apple-touch-icon" href="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png">
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/logo.png">
+    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/logo.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://ltdfoto.ru">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -143,6 +152,7 @@ html_code = '''<!DOCTYPE html>
 
         /* Плавающие фигурки */
         .floating-figures {
+            will-change: transform;
             position: relative;
             height: auto;
             min-height: 320px;
@@ -176,7 +186,409 @@ html_code = '''<!DOCTYPE html>
             50% { transform: translateY(-15px) rotate(2deg); }
         }
 
-        /* Расценки */
+                /* === БЛОК ЗАГРУЗКИ ФОТО === */
+        .upload-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #0d2b0d 0%, #0a1f0a 50%, #0d2b0d 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 235, 59, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .upload-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-wrapper {
+            contain: layout style;
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.4) 0%, rgba(13, 43, 13, 0.6) 100%);
+            border: 2px dashed rgba(129, 199, 132, 0.3);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-wrapper.dragover {
+            border-color: #81c784;
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.6) 0%, rgba(13, 43, 13, 0.8) 100%);
+            transform: scale(1.02);
+            box-shadow: 0 0 60px rgba(76, 175, 80, 0.3);
+        }
+
+        .upload-wrapper.has-file {
+            border-style: solid;
+            border-color: rgba(129, 199, 132, 0.5);
+        }
+
+        .upload-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(76, 175, 80, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .upload-wrapper.dragover .upload-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px rgba(76, 175, 80, 0.6);
+        }
+
+        .upload-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: #81c784;
+        }
+
+        .upload-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #81c784;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(129, 199, 132, 0.3);
+        }
+
+        .upload-subtitle {
+            font-size: 18px;
+            color: #a5d6a7;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: #e8f5e9;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 2px solid rgba(129, 199, 132, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(76, 175, 80, 0.4);
+            border-color: rgba(129, 199, 132, 0.6);
+        }
+
+        .upload-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        /* Превью загруженного фото */
+        .preview-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .preview-container.active {
+            display: block;
+        }
+
+        .preview-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 3px solid rgba(129, 199, 132, 0.3);
+        }
+
+        .preview-wrapper img {
+            max-width: 100%;
+            max-height: 400px;
+            display: block;
+            border-radius: 17px;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .preview-remove:hover {
+            background: rgba(255, 87, 34, 0.9);
+            transform: scale(1.1);
+        }
+
+        .preview-filename {
+            margin-top: 15px;
+            color: #a5d6a7;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        /* Кнопка генерации */
+        .generate-btn {
+            display: none;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+            color: white;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 87, 34, 0.4);
+            animation: glow 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn.active {
+            display: inline-block;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 87, 34, 0.6);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Прогресс генерации */
+        .progress-container {
+            display: none;
+            margin-top: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar-wrapper {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 4px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #2e7d32, #81c784, #ffeb3b);
+            border-radius: 16px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            color: #a5d6a7;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .progress-status {
+            color: #81c784;
+            font-size: 14px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
+        /* Результат генерации */
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.3) 0%, rgba(13, 43, 13, 0.5) 100%);
+            border: 2px solid rgba(129, 199, 132, 0.3);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #81c784;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            color: #a5d6a7;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .result-btn-primary {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: #e8f5e9;
+            border-color: rgba(129, 199, 132, 0.3);
+        }
+
+        .result-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .result-btn-secondary {
+            background: transparent;
+            color: #a5d6a7;
+            border-color: rgba(129, 199, 132, 0.3);
+        }
+
+        .result-btn-secondary:hover {
+            background: rgba(129, 199, 132, 0.1);
+            color: #81c784;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Подсказки */
+        .upload-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tip-card {
+            background: rgba(27, 94, 32, 0.2);
+            border: 1px solid rgba(129, 199, 132, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tip-card:hover {
+            background: rgba(27, 94, 32, 0.35);
+            border-color: rgba(129, 199, 132, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .tip-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .tip-title {
+            color: #81c784;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .tip-text {
+            color: #a5d6a7;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+/* Расценки */
         .pricing {
             padding: 80px 20px;
             background: linear-gradient(180deg, #0a1f0a 0%, #0d2b0d 100%);
@@ -479,7 +891,6 @@ html_code = '''<!DOCTYPE html>
             border-radius: 20px;
             padding: 30px;
             transition: all 0.4s;
-            backdrop-filter: blur(10px);
         }
 
         .contact-card:hover {
@@ -610,6 +1021,7 @@ html_code = '''<!DOCTYPE html>
             }
 
             .floating-figures {
+            will-change: transform;
                 gap: 8px;
             }
 
@@ -664,7 +1076,34 @@ html_code = '''<!DOCTYPE html>
             }
         }
         
-        @media (max-width: 480px) {
+                    /* Upload mobile */
+            .upload-wrapper {
+            contain: layout style;
+                padding: 40px 20px;
+            }
+
+            .upload-title {
+                font-size: 24px;
+            }
+
+            .upload-subtitle {
+                font-size: 16px;
+            }
+
+            .upload-tips {
+                grid-template-columns: 1fr;
+            }
+
+            .result-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .result-btn {
+                width: 100%;
+                max-width: 280px;
+            }
+@media (max-width: 480px) {
             .float-fig {
                 height: 70px;
                 max-width: 55px;
@@ -699,7 +1138,30 @@ html_code = '''<!DOCTYPE html>
                 font-size: 14px;
             }
         }
+
+        @supports (backdrop-filter: blur(10px)) {
+            .upload-wrapper {
+                backdrop-filter: blur(10px);
+            }
+            .result-box {
+                backdrop-filter: blur(10px);
+            }
+            .contact-card {
+                backdrop-filter: blur(10px);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .float-fig {
+                animation: none;
+            }
+        }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -707,12 +1169,13 @@ html_code = '''<!DOCTYPE html>
     <header>
         <div class="header-content">
             <div class="logo">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-19-220809-Photoroom.png" alt="Shunvel 3D Logo">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/logo.png" alt="Shunvel 3D Logo" loading="lazy">
                 <span class="logo-text">Shunvel 3D</span>
             </div>
-            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Меню">☰</button>
+            <button class="mobile-menu-btn" id="menuToggleBtn" aria-label="Меню">☰</button>
             <nav class="nav-links" id="navLinks">
                 <a href="#home">Главная</a>
+                <a href="#upload">Создать 3D</a>
                 <a href="#pricing">Расценки</a>
                 <a href="#works">Наши работы</a>
                 <a href="#process">Как заказать</a>
@@ -727,22 +1190,107 @@ html_code = '''<!DOCTYPE html>
         <p>Создаём уникальные 3D-фигурки. Идеальный подарок для себя и близких!</p>
         
         <div class="floating-figures">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075769.png" class="float-fig" loading="lazy" alt="3D фигурка человека">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075770.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075771.png" class="float-fig" loading="lazy" alt="3D фигурка мужчины">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075775.png" class="float-fig" loading="lazy" alt="3D фигурка солдата">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075773.png" class="float-fig" loading="lazy" alt="3D фигурка модели">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075772.png" class="float-fig" loading="lazy" alt="3D фигурка персонажа">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075776.png" class="float-fig" loading="lazy" alt="3D фигурка воина">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075777.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075779.png" class="float-fig" loading="lazy" alt="3D фигурка">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075785.png" class="float-fig" loading="lazy" alt="3D фигурка героя">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075786.png" class="float-fig" loading="lazy" alt="3D фигурка">
-            <img src="https://ltdfoto.ru/images/2026/03/14/1000075778.png" class="float-fig" loading="lazy" alt="3D фигурка">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig1.png" class="float-fig" loading="lazy" alt="3D фигурка человека">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig2.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig3.png" class="float-fig" loading="lazy" alt="3D фигурка мужчины">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig4.png" class="float-fig" loading="lazy" alt="3D фигурка солдата">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig5.png" class="float-fig" loading="lazy" alt="3D фигурка модели">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig6.png" class="float-fig" loading="lazy" alt="3D фигурка персонажа">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig7.png" class="float-fig" loading="lazy" alt="3D фигурка воина">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig8.png" class="float-fig" loading="lazy" alt="3D фигурка девушки">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig9.png" class="float-fig" loading="lazy" alt="3D фигурка">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig10.png" class="float-fig" loading="lazy" alt="3D фигурка героя">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig11.png" class="float-fig" loading="lazy" alt="3D фигурка">
+            <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/figures/fig12.png" class="float-fig" loading="lazy" alt="3D фигурка">
         </div>
     </section>
 
-    <!-- Расценки -->
+    
+    <!-- === БЛОК ЗАГРУЗКИ ФОТО === -->
+    <section class="upload-section" id="upload">
+        <div class="upload-container">
+            <h2 class="section-title">Создайте 3D-модель по фото</h2>
+
+            <div class="upload-wrapper" id="uploadWrapper">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                    </svg>
+                </div>
+                <h3 class="upload-title">Загрузите фото</h3>
+                <p class="upload-subtitle">Перетащите сюда фотографию или нажмите кнопку ниже. Мы создадим для вас 3D-модель!</p>
+
+                <button class="upload-btn" id="uploadBtn">
+                    📁 Выбрать фото
+                </button>
+                <input type="file" id="fileInput" class="upload-input" accept="image/*">
+
+                <!-- Превью -->
+                <div class="preview-container" id="previewContainer">
+                    <div class="preview-wrapper">
+                        <img id="previewImg" src="" alt="Загруженное фото" loading="lazy">
+                        <button class="preview-remove" id="removeFileBtn" title="Удалить">×</button>
+                    </div>
+                    <p class="preview-filename" id="previewFilename"></p>
+                </div>
+
+                <!-- Кнопка генерации -->
+                <button class="generate-btn" id="generateBtn" id="generateModelBtn">
+                    ✨ Создать 3D-модель
+                </button>
+
+                <!-- Прогресс -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0%</div>
+                    <div class="progress-status" id="progressStatus">Загрузка фото...</div>
+                </div>
+
+                <!-- Результат -->
+                <div class="result-container" id="resultContainer">
+                    <div class="result-box">
+                        <div class="result-icon">🎉</div>
+                        <h3 class="result-title">3D-модель готова!</h3>
+                        <p class="result-text">
+                            Ваша 3D-модель успешно создана. Наш мастер свяжется с вами для уточнения деталей печати.
+                            <br><br>
+                            <strong style="color:#ffeb3b">Следующий шаг:</strong> согласование размера, цвета и материала.
+                        </p>
+                        <div class="result-actions">
+                            <a href="https://t.me/shunvel3D" target="_blank" class="result-btn result-btn-primary" rel="noopener noreferrer">
+                                💬 Написать в Telegram
+                            </a>
+                            <button class="result-btn result-btn-secondary" id="resetUploadBtn">
+                                🔄 Загрузить другое фото
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Подсказки -->
+            <div class="upload-tips">
+                <div class="tip-card">
+                    <div class="tip-icon">📸</div>
+                    <div class="tip-title">Чёткое фото</div>
+                    <div class="tip-text">Используйте фото хорошего качества с хорошим освещением</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">👤</div>
+                    <div class="tip-title">Полный рост</div>
+                    <div class="tip-text">Желательно фото в полный рост или по пояс</div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎨</div>
+                    <div class="tip-title">Яркие цвета</div>
+                    <div class="tip-text">Чем контрастнее одежда, тем лучше детализация</div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Расценки -->
     <section class="pricing" id="pricing">
         <h2 class="section-title">Расценки</h2>
         <div class="pricing-grid">
@@ -788,56 +1336,56 @@ html_code = '''<!DOCTYPE html>
         <h2 class="section-title">Наши работы</h2>
         <div class="works-grid">
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-214017.png" loading="lazy" alt="Фигурка Воин освободитель">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work1.png" loading="lazy" alt="Фигурка Воин освободитель">
                 <div class="work-overlay">
                     <h4>Воин освободитель</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215459.png" loading="lazy" alt="Фигурка Родина мать зовет">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work2.png" loading="lazy" alt="Фигурка Родина мать зовет">
                 <div class="work-overlay">
                     <h4>Родина мать зовет</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215554.png" loading="lazy" alt="Фигурка Виктор Цой">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work3.png" loading="lazy" alt="Фигурка Виктор Цой">
                 <div class="work-overlay">
                     <h4>Виктор Цой</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-03-22-215946.png" loading="lazy" alt="Герб Российской Федерации 3D">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work4.png" loading="lazy" alt="Герб Российской Федерации 3D">
                 <div class="work-overlay">
                     <h4>Герб Российской Федерации</h4>
                     <p>Детализированная модель</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-000239.png" loading="lazy" alt="Фигурка по фото клиента">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work5.png" loading="lazy" alt="Фигурка по фото клиента">
                 <div class="work-overlay">
                     <h4>Фигурка по фото</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-26-214923.png" loading="lazy" alt="Коллекционная фигурка">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work6.png" loading="lazy" alt="Коллекционная фигурка">
                 <div class="work-overlay">
                     <h4>Коллекционная фигурка</h4>
                     <p>Высота 240 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-001721.png" loading="lazy" alt="Логотип сайта Shunvel 3D фигурка">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work7.png" loading="lazy" alt="Логотип сайта Shunvel 3D фигурка">
                 <div class="work-overlay">
                     <h4>Логотип этого сайта</h4>
                     <p>Высота 150 мм</p>
                 </div>
             </div>
             <div class="work-card">
-                <img src="https://ltdfoto.ru/images/2026/04/27/SNIMOK-EKRANA-2026-04-28-002044.png" loading="lazy" alt="3D фигурка корабля">
+                <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/works/work8.png" loading="lazy" alt="3D фигурка корабля">
                 <div class="work-overlay">
                     <h4>Корабль</h4>
                     <p>Длина 150 мм</p>
@@ -852,31 +1400,31 @@ html_code = '''<!DOCTYPE html>
         <div class="process-steps">
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/123.png" alt="Иконка отправки фото">
+                    <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/icons/step1.png" alt="Иконка отправки фото" loading="lazy">
                 </div>
                 <h4>1. Отправьте фото</h4>
                 <p>Пришлите нам фотографию, 3D-модель или свою идею в 
-                    <a href="https://vk.com/shunvel3d" target="_blank" class="inline-link">VK</a> или 
-                    <a href="https://t.me/shunvel3D" target="_blank" class="inline-link">Telegram</a>
+                    <a href="https://vk.com/shunvel3d" target="_blank" class="inline-link" rel="noopener noreferrer">VK</a> или 
+                    <a href="https://t.me/shunvel3D" target="_blank" class="inline-link" rel="noopener noreferrer">Telegram</a>
                 </p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/28/remove.photos-removed-background-1.png" alt="Иконка 3D моделирования">
+                    <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/icons/step2.png" alt="Иконка 3D моделирования" loading="lazy">
                 </div>
                 <h4>2. Мы моделируем</h4>
                 <p>Создаём 3D-модель и согласовываем с Вами</p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/44230.png" alt="Иконка 3D принтера">
+                    <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/icons/step3.png" alt="Иконка 3D принтера" loading="lazy">
                 </div>
                 <h4>3. Печатаем</h4>
                 <p>Изготавливаем фигурку на 3D-принтере</p>
             </div>
             <div class="step">
                 <div class="step-icon">
-                    <img src="https://ltdfoto.ru/images/2026/04/27/ba7aa3fc29774b2fd750f7f471fc2135.png" alt="Иконка доставки">
+                    <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/icons/step4.png" alt="Иконка доставки" loading="lazy">
                 </div>
                 <h4>4. Получаете</h4>
                 <p>Доставка по всей России либо самовывоз г. Магнитогорск.</p>
@@ -893,28 +1441,28 @@ html_code = '''<!DOCTYPE html>
         <div class="contact-grid">
             <div class="contact-card">
                 <div class="contact-icon" data-icon="telegram">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" loading="lazy">
                 </div>
                 <h4>Telegram</h4>
-                <a href="https://t.me/shunvel3D" target="_blank" aria-label="Написать в Telegram">@shunvel3D</a>
+                <a href="https://t.me/shunvel3D" target="_blank" aria-label="Написать в Telegram" rel="noopener noreferrer">@shunvel3D</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon" data-icon="vk">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/VK_Compact_Logo_%282021-present%29.svg" alt="ВКонтакте">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/VK_Compact_Logo_%282021-present%29.svg" alt="ВКонтакте" loading="lazy">
                 </div>
                 <h4>ВКонтакте</h4>
-                <a href="https://vk.com/shunvel3d" target="_blank" aria-label="Открыть страницу ВКонтакте">vk.com/shunvel3d</a>
+                <a href="https://vk.com/shunvel3d" target="_blank" aria-label="Открыть страницу ВКонтакте" rel="noopener noreferrer">vk.com/shunvel3d</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon" data-icon="tiktok">
-                    <img src="https://ltdfoto.ru/images/2026/04/30/tiktok_logo_icon_187324.png" alt="TikTok">
+                    <img src="https://cdn.jsdelivr.net/gh/lover8951/shunvel3d-images@main/icons/tiktok.png" alt="TikTok" loading="lazy">
                 </div>
                 <h4>TikTok</h4>
-                <a href="https://www.tiktok.com/@shunvel3d" target="_blank" aria-label="Открыть TikTok">@shunvel3d</a>
+                <a href="https://www.tiktok.com/@shunvel3d" target="_blank" aria-label="Открыть TikTok" rel="noopener noreferrer">@shunvel3d</a>
             </div>
             <div class="contact-card">
                 <div class="contact-icon" data-icon="email">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" loading="lazy">
                 </div>
                 <h4>Email</h4>
                 <a href="mailto:shunvel3d@gmail.com" aria-label="Написать на email">shunvel3d@gmail.com</a>
@@ -1035,7 +1583,163 @@ html_code = '''<!DOCTYPE html>
                 }
             });
         });
-    </script>
+    
+        // ==================== ЗАГРУЗКА ФОТО ====================
+        const uploadWrapper = document.getElementById('uploadWrapper');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImg = document.getElementById('previewImg');
+        const previewFilename = document.getElementById('previewFilename');
+        const generateBtn = document.getElementById('generateBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressStatus = document.getElementById('progressStatus');
+        const resultContainer = document.getElementById('resultContainer');
+
+        let currentFile = null;
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadWrapper.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadWrapper.addEventListener(eventName, () => {
+                uploadWrapper.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadWrapper.addEventListener(eventName, () => {
+                uploadWrapper.classList.remove('dragover');
+            }, false);
+        });
+
+        uploadWrapper.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                handleFile(this.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Пожалуйста, загрузите изображение (JPG, PNG, WEBP)');
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Файл слишком большой. Максимум 10 МБ.');
+                return;
+            }
+
+            currentFile = file;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewFilename.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' МБ)';
+                previewContainer.classList.add('active');
+                generateBtn.classList.add('active');
+                uploadWrapper.classList.add('has-file');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeFile() {
+            currentFile = null;
+            fileInput.value = '';
+            previewImg.src = '';
+            previewContainer.classList.remove('active');
+            generateBtn.classList.remove('active');
+            uploadWrapper.classList.remove('has-file');
+            progressContainer.classList.remove('active');
+            resultContainer.classList.remove('active');
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+        }
+
+        function resetUpload() {
+            removeFile();
+            window.scrollTo({ top: document.getElementById('upload').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Имитация генерации 3D-модели
+        function startGeneration() {
+            if (!currentFile) return;
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = '⏳ Генерация...';
+            progressContainer.classList.add('active');
+            resultContainer.classList.remove('active');
+
+            const steps = [
+                { percent: 10, text: 'Загрузка фото...', status: 'Загружаем ваше фото на сервер' },
+                { percent: 25, text: '25%', status: 'Анализируем изображение...' },
+                { percent: 40, text: '40%', status: 'Создаём 3D-сетку...' },
+                { percent: 55, text: '55%', status: 'Добавляем детали и текстуры...' },
+                { percent: 70, text: '70%', status: 'Оптимизируем модель для печати...' },
+                { percent: 85, text: '85%', status: 'Финальная проверка качества...' },
+                { percent: 100, text: '100%', status: 'Готово!' }
+            ];
+
+            let currentStep = 0;
+
+            function updateProgress() {
+                if (currentStep >= steps.length) {
+                    // Показываем результат
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                        resultContainer.classList.add('active');
+                        generateBtn.disabled = false;
+                        generateBtn.textContent = '✨ Создать 3D-модель';
+
+                        // Прокрутка к результату
+                        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 500);
+                    return;
+                }
+
+                const step = steps[currentStep];
+                progressBar.style.width = step.percent + '%';
+                progressText.textContent = step.text;
+                progressStatus.textContent = step.status;
+
+                currentStep++;
+                setTimeout(updateProgress, 800 + Math.random() * 600);
+            }
+
+            updateProgress();
+        }
+
+        // ПРИ ДОБАВЛЕНИИ FETCH API:
+        // Всегда используйте .catch() для обработки ошибок:
+        // fetch(url).then(...).catch(err => console.error('Fetch error:', err));
+
+        // Обработчики событий (вместо inline onclick)
+        document.getElementById('menuToggleBtn').addEventListener('click', toggleMenu);
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+        document.getElementById('removeFileBtn').addEventListener('click', removeFile);
+        document.getElementById('generateModelBtn').addEventListener('click', startGeneration);
+        document.getElementById('resetUploadBtn').addEventListener('click', resetUpload);
+</script>
 </body>
 </html>'''
 
